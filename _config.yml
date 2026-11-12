@@ -1,0 +1,6 @@
+# Source fragments and tooling stay in the repo but are not served.
+exclude:
+  - build.sh
+  - README.md
+  - mile/page.html
+  - mile/start.page.html

@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your First Faster Mile</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A simple getting-started plan to a faster mile by race day: three runs a week, no jargon, with videos for every new word.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: a calm single column. Same track-blue world as the full guide, more air, bigger type, fewer ideas per screen. */
+:root{
+  --bg:#f3f6f9; --surface:#ffffff; --ink:#0f1c2b; --muted:#4f5f71; --line:#d3dbe4;
+  --lane:#123a63; --lane-ink:#f3f7fb; --goal:#f2b705; --goal-ink:#3a2a00; --soft:#e2ebf5;
+  --ok:#1f7a4d; --warn:#a4570b; --stop:#b3261e; --link:#1d5fa6;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b1420; --surface:#12202f; --ink:#e7eef6; --muted:#9db0c4; --line:#24384d;
+  --lane:#0e2e50; --lane-ink:#eef4fa; --goal:#ffc928; --goal-ink:#2b2000; --soft:#16283b;
+  --ok:#5cc28e; --warn:#e7a35a; --stop:#ff8a80; --link:#8cc0f5; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b1420; --surface:#12202f; --ink:#e7eef6; --muted:#9db0c4; --line:#24384d;
+  --lane:#0e2e50; --lane-ink:#eef4fa; --goal:#ffc928; --goal-ink:#2b2000; --soft:#16283b;
+  --ok:#5cc28e; --warn:#e7a35a; --stop:#ff8a80; --link:#8cc0f5; color-scheme:dark}
+
+*{box-sizing:border-box} body{margin:0} [hidden]{display:none!important} img{max-width:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.65}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.02;text-wrap:balance;margin:0}
+h2{font-size:clamp(2.1rem,6vw,3rem);font-weight:900;text-transform:uppercase}
+h3{font-size:1.6rem;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.stack{display:flex;flex-direction:column;gap:18px}
+section{padding-block:clamp(48px,8vw,80px)}
+section+section{border-top:1px solid var(--line)}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--goal);outline-offset:2px}
+.lede{font-size:1.15rem;color:var(--muted)}
+b.hl{background:var(--goal);color:var(--goal-ink);padding:0 .25em;border-radius:3px}
+.watch{display:inline-flex;align-items:center;gap:8px;color:var(--link);font-weight:700;font-size:.95rem;text-decoration:none}
+.watch::before{content:"";width:0;height:0;border-left:9px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.watch:hover{text-decoration:underline}
+.watch small{font-weight:400;color:var(--muted)}
+.nerd{font-size:1rem;color:var(--muted)}
+.nerd a{color:var(--link);font-weight:700}
+
+.hero{background:var(--lane);color:var(--lane-ink);padding-block:clamp(40px,7vw,72px)}
+.hero .eyebrow{color:color-mix(in srgb,var(--lane-ink) 70%,transparent)}
+.hero h1{font-size:clamp(3rem,10vw,5.2rem);font-weight:900;text-transform:uppercase;margin-top:8px}
+.hero h1 span{color:var(--goal)}
+.hero p{color:color-mix(in srgb,var(--lane-ink) 88%,transparent);font-size:1.15rem;max-width:58ch}
+.hero .nerd, .hero .nerd a{color:color-mix(in srgb,var(--lane-ink) 85%,transparent)}
+.hero .nerd a{color:var(--goal)}
+.inputs{display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:14px;margin-top:8px;max-width:600px}
+.inputs label{display:flex;flex-direction:column;gap:6px;font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;min-width:0}
+.inputs input{font:700 1.7rem var(--mono);padding:8px 12px;border-radius:10px;border:2px solid transparent;background:#fbfdff;color:#0f1c2b;width:100%;min-width:0;color-scheme:light}
+.inputs input[type="date"]{font-size:1.05rem;height:100%;min-height:54px}
+.inputs input:focus{border-color:var(--goal);outline:none}
+.err{color:var(--goal);min-height:1.4em;font-size:.95rem}
+.answer{background:rgba(0,0,0,.2);border-radius:14px;padding:18px 20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.answer div{display:flex;flex-direction:column;gap:2px}
+.answer b{font-family:var(--display);font-size:2.4rem;font-weight:900;color:var(--goal);line-height:1}
+.answer span{font-size:.9rem;opacity:.85}
+.status{display:flex;gap:10px;align-items:baseline;font-size:1.05rem}
+.status .pill{font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--goal);color:var(--goal-ink);white-space:nowrap}
+
+.secret{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none;counter-reset:s}
+.secret li{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;font-size:1.15rem;counter-increment:s}
+.secret li::before{content:counter(s);font-family:var(--display);font-weight:900;font-size:2.4rem;color:var(--lane);text-align:center;line-height:1}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .secret li::before{color:var(--goal)}}
+:root[data-theme="dark"] .secret li::before{color:var(--goal)}
+
+.runs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.run{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.run .when{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;color:var(--muted)}
+.run .what{font-family:var(--mono);font-weight:700;background:var(--soft);border-radius:8px;padding:10px 12px;font-size:.95rem}
+.run .feel{font-size:.95rem;color:var(--muted)}
+.run .watch{margin-top:auto}
+.run.fast{border:2px solid var(--goal)}
+.bonus{background:var(--soft);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+
+.plan{display:flex;flex-direction:column;gap:14px;margin:0;padding:0;list-style:none}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;grid-template-columns:150px 1fr;gap:18px}
+.stage .dates{display:flex;flex-direction:column;gap:4px}
+.stage .dates b{font-family:var(--mono);font-size:.95rem}
+.stage .dates span{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.stage ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px;font-size:1rem}
+.stage .check{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px;font-size:1rem}
+.stage.race{background:var(--lane);color:var(--lane-ink);border:0}
+.stage.race .dates span{color:var(--goal)}
+.laps{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.laps span{font-family:var(--mono);font-weight:700;background:rgba(255,255,255,.12);border-radius:8px;padding:6px 10px;font-size:.9rem}
+.laps span b{color:var(--goal)}
+.tip{font-size:1rem;color:var(--muted)}
+
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rule{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.rule h3{font-size:1.35rem;margin-bottom:6px}
+.rule p{font-size:.98rem;color:var(--muted)}
+.rule.r{border-color:var(--stop)} .rule.r h3{color:var(--stop)}
+
+.words{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.word{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.word h3{font-size:1.4rem}
+.word p{font-size:.98rem;color:var(--muted)}
+.word .watch{margin-top:auto}
+
+.next{background:var(--lane);color:var(--lane-ink);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.next h2{color:var(--lane-ink)}
+.next p{opacity:.9;max-width:56ch}
+.cta{display:inline-block;background:var(--goal);color:var(--goal-ink);font-weight:700;text-decoration:none;padding:12px 22px;border-radius:999px}
+footer{padding-block:32px 56px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line)}
+
+@media (max-width:720px){
+  .runs,.rules,.words{grid-template-columns:1fr}
+  .answer{grid-template-columns:1fr 1fr}
+  .inputs{grid-template-columns:1fr 1fr}
+  .inputs label.date{grid-column:1 / -1}
+  .stage{grid-template-columns:1fr;gap:10px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap stack">
+    <div class="eyebrow">Getting started guide · 3 runs a week</div>
+    <h1>Your first <span>faster</span> mile</h1>
+    <p>Getting faster at the mile is simpler than it sounds. Run three times a week, keep most of it slow, and do a few fast bits once a week. Put in your times and race day, and this page builds your plan.</p>
+    <form class="inputs" id="f" novalidate>
+      <label for="cur">My mile now<input id="cur" inputmode="numeric" value="7:46" autocomplete="off"></label>
+      <label for="goal">My goal<input id="goal" inputmode="numeric" value="7:00" autocomplete="off"></label>
+      <label for="race" class="date">Race day<input id="race" type="date" value="2027-02-27"></label>
+    </form>
+    <div class="err" id="err" role="status"></div>
+    <div class="answer" aria-live="polite">
+      <div><b class="mono" data-k="perLap">11</b><span>seconds faster each lap</span></div>
+      <div><b class="mono" data-k="weeks">15</b><span>weeks until race day</span></div>
+      <div><b class="mono" data-k="tt">7:23</b><span>your checkpoint target in <span data-k="ttMonth">January</span></span></div>
+    </div>
+    <p class="status"><span class="pill" data-k="pill">On track</span><span data-k="status">About 15 weeks of training gets you there, and you have 15. No missed weeks.</span></p>
+    <p class="nerd">Like the details? <a class="fullLink" href="./">The full guide</a> has the science, exact paces and more workouts.</p>
+  </div>
+</header>
+
+<main>
+<section>
+  <div class="wrap stack">
+    <div class="eyebrow">The big idea</div>
+    <h2>The whole secret</h2>
+    <ol class="secret">
+      <li>Run three times a week, every week.</li>
+      <li>Most runs should be slow enough to talk the whole time.</li>
+      <li>Once a week, run some short fast bits with walks in between.</li>
+    </ol>
+    <p class="lede">That's it. Slow running builds your engine. Fast bits teach your legs to move quickly. Showing up every week is what makes both work.</p>
+    <p class="nerd">Why does slow running make you faster? <a class="fullLink" href="./">See the science</a>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack">
+    <div class="eyebrow">Your week</div>
+    <h2>Your three runs</h2>
+    <p class="lede">Put a rest day between runs when you can, like Tuesday, Thursday and Saturday. What's inside each run grows over the season (see the plan below).</p>
+    <div class="runs">
+      <article class="run fast">
+        <div class="when">RUN 1</div>
+        <h3>Fast bits</h3>
+        <div class="what">Jog 10 min<br>8 × 30 sec fast<br>90 sec walk after each<br>Jog 5 min</div>
+        <p class="feel"><b>How it feels:</b> quick and strong, like the last lap of a race, but in control. Not an all-out sprint.</p>
+        <a class="watch" href="https://www.youtube.com/watch?v=KWB62FfmpBI" target="_blank" rel="noopener">Why fast bits work <small>· GTN</small></a>
+      </article>
+      <article class="run">
+        <div class="when">RUN 2</div>
+        <h3>Chatty run</h3>
+        <div class="what">20–30 min<br>slow and steady</div>
+        <p class="feel"><b>How it feels:</b> you could talk in full sentences. For you that's about <span class="mono" data-k="easy">10:10–11:15</span> per mile. Slower is fine.</p>
+        <a class="watch" href="https://www.youtube.com/watch?v=mifojj_pgKM" target="_blank" rel="noopener">How easy is easy? <small>· GTN</small></a>
+      </article>
+      <article class="run">
+        <div class="when">RUN 3</div>
+        <h3>Longer chatty run</h3>
+        <div class="what">30–40 min<br>same easy feel</div>
+        <p class="feel"><b>How it feels:</b> like run 2, just longer. If you need to walk for a minute, walk. Keep going.</p>
+        <a class="watch" href="https://www.youtube.com/watch?v=wue6U_nqZP0" target="_blank" rel="noopener">Finding your easy pace <small>· Strength Running</small></a>
+      </article>
+    </div>
+    <div class="bonus">
+      <h3>Bonus: 10 minutes of leg strength, twice a week</h3>
+      <p>After a run or on a rest day: 15 squats, 10 lunges each leg, 15 calf raises each leg, a 30-second plank. Do it twice through. Stronger legs make running feel easier and keep knees and shins happy.</p>
+      <a class="watch" href="https://www.youtube.com/watch?v=JATx1R9lCMo" target="_blank" rel="noopener">Follow along: beginner strength for runners <small>· Jeffrey Peng, MD</small></a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack">
+    <div class="eyebrow">Now to race day</div>
+    <h2>Your plan</h2>
+    <p class="lede">Four stages. Each one adds a little. The dates fill in from your race day.</p>
+    <ol class="plan">
+      <li class="stage">
+        <div class="dates"><span>Stage 1 · Build the habit</span><b data-k="d1">Nov 16 – Dec 13</b></div>
+        <div>
+          <ul>
+            <li><b>Fast bits:</b> 6 × 30 sec, building to 8 × 30 sec. Walk 90 sec after each.</li>
+            <li><b>Chatty run:</b> 20 → 25 min.</li>
+            <li><b>Longer chatty run:</b> 30 → 35 min.</li>
+          </ul>
+        </div>
+      </li>
+      <li class="stage">
+        <div class="dates"><span>Stage 2 · Get stronger</span><b data-k="d2">Dec 14 – Jan 10</b></div>
+        <div>
+          <ul>
+            <li><b>Fast bits:</b> 6 × 45 sec, building to 5 × 60 sec. Walk 2 min after each.</li>
+            <li><b>Chatty run:</b> 25 → 30 min.</li>
+            <li><b>Longer chatty run:</b> 35 → 40 min.</li>
+          </ul>
+          <p class="check"><b>Checkpoint at the end:</b> rest the day before, warm up with a 10-min jog, then run a timed mile with even laps. Aim for <b class="hl mono" data-k="tt">7:23</b>, about <span class="mono" data-k="ttLap">1:50</span> a lap. Then put your new time in at the top of this page.</p>
+        </div>
+      </li>
+      <li class="stage">
+        <div class="dates"><span>Stage 3 · Get race-ready</span><b data-k="d3">Jan 11 – Feb 14</b></div>
+        <div>
+          <ul>
+            <li><b>Fast bits become fast laps:</b> 4 → 6 × one lap (400 m) at <span class="mono" data-k="g400">1:44</span>. Walk or jog 2–3 min between.</li>
+            <li><b>Chatty run:</b> 30 min, then 4 smooth 20-sec speed-ups (runners call these strides).</li>
+            <li><b>Longer chatty run:</b> 40 → 45 min.</li>
+          </ul>
+          <p class="check"><b>Ready test:</b> 4 laps at <b class="hl mono" data-k="g400">1:44</b> each with only 1 minute rest between. If you can do that, you're ready for <span class="mono" data-k="goal">7:00</span>.</p>
+        </div>
+      </li>
+      <li class="stage race">
+        <div class="dates"><span>Stage 4 · Rest up and race</span><b data-k="d4">Feb 15 – Feb 27</b></div>
+        <div>
+          <ul>
+            <li>Keep running 3 times a week, but make each run about a third shorter.</li>
+            <li>Early in race week: 3–4 fast laps at goal pace. Rest the day before the race.</li>
+            <li><b>Race day:</b> even laps. Lap 1 should feel too easy. Lap 3 is the hard one. Kick from 200 m out.</li>
+          </ul>
+          <div class="laps" aria-label="Lap targets">
+            <span>400 m <b data-k="s1">1:44</b></span><span>800 m <b data-k="s2">3:29</b></span><span>1200 m <b data-k="s3">5:13</b></span><span>Finish <b data-k="goal">7:00</b></span>
+          </div>
+        </div>
+      </li>
+    </ol>
+    <p class="tip"><b>Holidays and bad weather:</b> missing a few days is fine. Missing two weeks is not. On busy or icy days, a 15-minute run or the strength routine indoors still counts.</p>
+    <p class="nerd">Want exact paces for every kind of run? <a class="fullLink" href="./">Open the pace calculator</a>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack">
+    <div class="eyebrow">Stay healthy</div>
+    <h2>Four rules</h2>
+    <div class="rules">
+      <div class="rule"><h3>Slow days are slow</h3><p>If you can't talk, slow down. Going hard every day makes you slower, not faster.</p></div>
+      <div class="rule"><h3>No hard days in a row</h3><p>Your body gets faster while it rests. Fast bits need a slow day or rest day after.</p></div>
+      <div class="rule"><h3>Sleep and eat</h3><p>Aim for 8–10 hours of sleep. Eat a real meal or snack after running. Growing plus running takes a lot of fuel.</p></div>
+      <div class="rule r"><h3>Sharp pain means stop</h3><p>Sore muscles are normal. Pain in one spot, or pain that gets worse as you run, is not. Stop and tell a parent or coach.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack">
+    <div class="eyebrow">Running words</div>
+    <h2>Words you'll hear</h2>
+    <p class="lede">Coaches and other runners use these all the time. Each has a short video from an established running coach or channel.</p>
+    <div class="words">
+      <div class="word"><h3>Easy pace</h3><p>Your chatty run speed. Most of your running happens here.</p><a class="watch" href="https://www.youtube.com/watch?v=mifojj_pgKM" target="_blank" rel="noopener">How easy should an easy run be? <small>· GTN</small></a></div>
+      <div class="word"><h3>Strides</h3><p>Short, smooth speed-ups of about 20 seconds at the end of an easy run. Not a sprint.</p><a class="watch" href="https://www.youtube.com/watch?v=1i2ZPpXtuOk" target="_blank" rel="noopener">How to run strides <small>· The Run Experience</small></a></div>
+      <div class="word"><h3>Intervals</h3><p>Fast running with rest in between. Your fast bits and fast laps are intervals.</p><a class="watch" href="https://www.youtube.com/watch?v=KWB62FfmpBI" target="_blank" rel="noopener">Why intervals work <small>· GTN</small></a></div>
+      <div class="word"><h3>Tempo</h3><p>A steady run that's "comfortably hard": faster than chatty, slower than racing.</p><a class="watch" href="https://www.youtube.com/watch?v=OjRlt9VoR9E" target="_blank" rel="noopener">Tempo running explained <small>· GTN</small></a></div>
+      <div class="word"><h3>Splits</h3><p>Your time for each lap or section. "Even splits" means every lap takes about the same time.</p><a class="watch" href="https://www.youtube.com/watch?v=EZoP3YDa8ds" target="_blank" rel="noopener">How to pace a race <small>· Coach Parry</small></a></div>
+      <div class="word"><h3>Taper</h3><p>Running less in the last week or two before a race so you show up fresh.</p><a class="watch" href="https://www.youtube.com/watch?v=hoVdvLw-f4k" target="_blank" rel="noopener">How to taper for a race <small>· GTN</small></a></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="next">
+      <div class="eyebrow" style="color:inherit;opacity:.75">For the curious</div>
+      <h2>Want the nerdy details?</h2>
+      <p>This page is all you need to follow the plan. The full guide explains the science behind it: why the mile works the way it does, exact training paces for every kind of run, more workouts, and a lap-by-lap race plan.</p>
+      <a class="cta fullLink" href="./">Open the full guide</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">General training guidance, not medical advice. Check with a doctor first if you have a heart condition, asthma, or ongoing pain.</div></footer>
+
+<script>
+(function(){
+  const MILE = 1609.34, DAY = 864e5;
+  const fmt0 = s => { s = Math.round(s); const m = Math.floor(s/60), r = s%60; return m + ":" + (r<10?"0":"") + r; };
+  function parse(s){ s = String(s||"").trim(); let m = /^(\d{1,2})[:.\-](\d{2})$/.exec(s) || /^(\d{1,2})(\d{2})$/.exec(s); if(!m) return null; const sec = +m[1]*60 + +m[2]; return (+m[2] < 60 && sec >= 240 && sec <= 900) ? sec : null; }
+  function parseDate(s){ const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s||"")); return m ? new Date(+m[1], +m[2]-1, +m[3]) : null; }
+  function vdot(sec){ const t = sec/60, v = MILE/t; const pct = 0.8 + 0.1894393*Math.exp(-0.012778*t) + 0.2989558*Math.exp(-0.1932605*t); return (-4.60 + 0.182258*v + 0.000104*v*v)/pct; }
+  function velFor(vo2){ const a=0.000104,b=0.182258,c=-4.60-vo2; return (-b+Math.sqrt(b*b-4*a*c))/(2*a); }
+  function mileFor(V){ let lo=180, hi=1200; for(let i=0;i<50;i++){ const mid=(lo+hi)/2; if (vdot(mid) > V) lo = mid; else hi = mid; } return (lo+hi)/2; }
+  const set = (k, v) => document.querySelectorAll('[data-k="'+k+'"]').forEach(e => e.textContent = v);
+  const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const MONTH = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const md = d => MON[d.getMonth()] + " " + d.getDate();
+  const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+
+  const curEl = document.getElementById("cur"), goalEl = document.getElementById("goal"), raceEl = document.getElementById("race");
+  const q = new URLSearchParams(location.search);
+  let saved = {}; try { saved = JSON.parse(localStorage.getItem("mile-times") || "{}"); } catch(e){}
+  if (parse(q.get("now"))) curEl.value = fmt0(parse(q.get("now"))); else if (parse(saved.now)) curEl.value = saved.now;
+  if (parse(q.get("goal"))) goalEl.value = fmt0(parse(q.get("goal"))); else if (parse(saved.goal)) goalEl.value = saved.goal;
+  if (parseDate(q.get("race"))) raceEl.value = q.get("race"); else if (parseDate(saved.race)) raceEl.value = saved.race;
+
+  const onSite = /nickturmanbryant\.com$/.test(location.hostname);
+
+  function render(){
+    const C = parse(curEl.value), G = parse(goalEl.value), race = parseDate(raceEl.value), err = document.getElementById("err");
+    if (!C || !G){ err.textContent = "Type times like 7:46 (between 4:00 and 15:00)."; return; }
+    if (G >= C){ err.textContent = "Your goal should be faster than your current time."; return; }
+    const today = new Date(); today.setHours(0,0,0,0);
+    const start = addDays(today, (8 - today.getDay()) % 7);   // next Monday (or today if Monday)
+    if (!race || race - start < 21*DAY){ err.textContent = "Pick a race day at least 3 weeks after " + md(start) + "."; return; }
+    err.textContent = "";
+
+    const V = vdot(C), VG = vdot(G), dV = VG - V;
+    const W = Math.ceil((race - start + DAY) / (7*DAY));
+    const need = Math.max(6, Math.ceil(dV/0.3));
+    const taper = 2, R = W - taper, s1 = Math.max(1, Math.round(R*4/13)), s2 = Math.max(1, Math.round(R*4/13)), s3 = Math.max(1, R - s1 - s2);
+    const wkStart = w => addDays(start, (w-1)*7), wkEnd = w => addDays(start, w*7 - 1);
+    set("d1", md(wkStart(1)) + " – " + md(wkEnd(s1)));
+    set("d2", md(wkStart(s1+1)) + " – " + md(wkEnd(s1+s2)));
+    set("d3", md(wkStart(s1+s2+1)) + " – " + md(wkEnd(s1+s2+s3)));
+    set("d4", md(wkStart(s1+s2+s3+1)) + " – " + md(race));
+
+    let pill, status, rate;
+    if (need <= W){ pill = "On track"; status = "About " + need + " weeks of training gets you there, and you have " + W + ". Keep every week."; rate = dV/W; }
+    else if (need <= W*1.4){ pill = "Stretch goal"; status = "This usually takes about " + need + " weeks and you have " + W + ". Doable with no missed weeks. Adding a 4th easy run helps."; rate = dV/W; }
+    else { const reach = mileFor(V + W*0.3); pill = "Big jump"; status = "This usually takes about " + need + " weeks and you have " + W + ". Aim for about " + fmt0(reach) + " on race day, then keep going."; rate = 0.3; }
+    set("pill", pill); set("status", status);
+
+    const ckDate = wkEnd(s1+s2), tt = Math.max(G, mileFor(V + Math.min(dV, rate*(s1+s2))));
+    set("tt", fmt0(tt)); set("ttLap", fmt0(tt*400/MILE)); set("ttMonth", MONTH[ckDate.getMonth()]);
+    set("weeks", W);
+    set("perLap", Math.round((C - G)*400/MILE));
+    set("easy", fmt0(MILE/velFor(V*0.74)*60) + "–" + fmt0(MILE/velFor(V*0.65)*60));
+    set("goal", fmt0(G)); set("g400", fmt0(G*400/MILE));
+    set("s1", fmt0(G*400/MILE)); set("s2", fmt0(G*800/MILE)); set("s3", fmt0(G*1200/MILE));
+
+    const qs = "?now=" + fmt0(C).replace(":","-") + "&goal=" + fmt0(G).replace(":","-") + "&race=" + raceEl.value;
+    document.querySelectorAll(".fullLink").forEach(a => a.href = onSite ? "./" + qs : "https://claude.ai/artifact/Fz6nc98z3ZDEvXp1mJvtNU");
+    try { localStorage.setItem("mile-times", JSON.stringify({now: fmt0(C), goal: fmt0(G), race: raceEl.value})); } catch(e){}
+    if (onSite) { try { history.replaceState(null, "", location.pathname + qs); } catch(e){} }
+  }
+  [curEl, goalEl, raceEl].forEach(el => { el.addEventListener("input", render); el.addEventListener("change", render); });
+  document.getElementById("f").addEventListener("submit", e => e.preventDefault());
+  render();
+})();
+</script>
+</body>
+</html>
