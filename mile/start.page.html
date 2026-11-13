@@ -62,7 +62,7 @@ b.hl{background:var(--goal);color:var(--goal-ink);padding:0 .25em;border-radius:
 .answer{background:rgba(0,0,0,.2);border-radius:14px;padding:18px 20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .answer div{display:flex;flex-direction:column;gap:2px}
 .answer b{font-family:var(--display);font-size:2.4rem;font-weight:900;color:var(--goal);line-height:1}
-.answer span{font-size:.9rem;opacity:.85}
+.answer > div > span{font-size:.9rem;opacity:.85}
 .status{display:flex;gap:10px;align-items:baseline;font-size:1.05rem}
 .status .pill{font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--goal);color:var(--goal-ink);white-space:nowrap}
 
@@ -298,8 +298,19 @@ footer{padding-block:32px 56px;color:var(--muted);font-size:.9rem;border-top:1px
 (function(){
   const MILE = 1609.34, DAY = 864e5;
   const fmt0 = s => { s = Math.round(s); const m = Math.floor(s/60), r = s%60; return m + ":" + (r<10?"0":"") + r; };
-  function parse(s){ s = String(s||"").trim(); let m = /^(\d{1,2})[:.\-](\d{2})$/.exec(s) || /^(\d{1,2})(\d{2})$/.exec(s); if(!m) return null; const sec = +m[1]*60 + +m[2]; return (+m[2] < 60 && sec >= 240 && sec <= 900) ? sec : null; }
-  function parseDate(s){ const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s||"")); return m ? new Date(+m[1], +m[2]-1, +m[3]) : null; }
+  function check(raw, label){
+    const s = String(raw == null ? "" : raw).trim();
+    if (!s) return {msg: label + " is empty. Type a time like 7:46."};
+    const m = /^(\d{1,2})\s*[:.\-]\s*(\d{1,2})$/.exec(s) || /^(\d{1,2})(\d{2})$/.exec(s);
+    if (!m) return {msg: label + ": “" + s.slice(0, 12) + (s.length > 12 ? "…" : "") + "” isn't a time. Type minutes and seconds, like 7:46."};
+    if (+m[2] > 59) return {msg: label + ": seconds only go up to 59."};
+    const sec = +m[1]*60 + +m[2];
+    if (sec < 224) return {msg: label + ": that's faster than the world record (3:43). Nice try."};
+    if (sec > 900) return {msg: label + ": enter a running time of 15:00 or less."};
+    return {sec};
+  }
+  function parse(s){ return check(s, "").sec || null; }
+  function parseDate(s){ const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s||"")); if (!m) return null; const d = new Date(+m[1], +m[2]-1, +m[3]); return (d.getFullYear() === +m[1] && d.getMonth() === +m[2]-1 && d.getDate() === +m[3]) ? d : null; }
   function vdot(sec){ const t = sec/60, v = MILE/t; const pct = 0.8 + 0.1894393*Math.exp(-0.012778*t) + 0.2989558*Math.exp(-0.1932605*t); return (-4.60 + 0.182258*v + 0.000104*v*v)/pct; }
   function velFor(vo2){ const a=0.000104,b=0.182258,c=-4.60-vo2; return (-b+Math.sqrt(b*b-4*a*c))/(2*a); }
   function mileFor(V){ let lo=180, hi=1200; for(let i=0;i<50;i++){ const mid=(lo+hi)/2; if (vdot(mid) > V) lo = mid; else hi = mid; } return (lo+hi)/2; }
@@ -314,22 +325,25 @@ footer{padding-block:32px 56px;color:var(--muted);font-size:.9rem;border-top:1px
   let saved = {}; try { saved = JSON.parse(localStorage.getItem("mile-times") || "{}"); } catch(e){}
   if (parse(q.get("now"))) curEl.value = fmt0(parse(q.get("now"))); else if (parse(saved.now)) curEl.value = saved.now;
   if (parse(q.get("goal"))) goalEl.value = fmt0(parse(q.get("goal"))); else if (parse(saved.goal)) goalEl.value = saved.goal;
-  if (parseDate(q.get("race"))) raceEl.value = q.get("race"); else if (parseDate(saved.race)) raceEl.value = saved.race;
+  if (parseDate(q.get("race"))) raceEl.value = q.get("race"); else if (parseDate(saved.race) && parseDate(saved.race) - Date.now() > 21*DAY) raceEl.value = saved.race;
 
   const onSite = /nickturmanbryant\.com$/.test(location.hostname);
 
   function render(){
-    const C = parse(curEl.value), G = parse(goalEl.value), race = parseDate(raceEl.value), err = document.getElementById("err");
-    if (!C || !G){ err.textContent = "Type times like 7:46 (between 4:00 and 15:00)."; return; }
+    const err = document.getElementById("err"), cc = check(curEl.value, "My mile now"), gc = check(goalEl.value, "My goal"), race = parseDate(raceEl.value);
+    if (cc.msg || gc.msg){ err.textContent = cc.msg || gc.msg; return; }
+    const C = cc.sec, G = gc.sec;
     if (G >= C){ err.textContent = "Your goal should be faster than your current time."; return; }
     const today = new Date(); today.setHours(0,0,0,0);
     const start = addDays(today, (8 - today.getDay()) % 7);   // next Monday (or today if Monday)
-    if (!race || race - start < 21*DAY){ err.textContent = "Pick a race day at least 3 weeks after " + md(start) + "."; return; }
+    if (!race){ err.textContent = "Pick a race day."; return; }
+    if (race - start < 21*DAY){ err.textContent = "Pick a race day at least 3 weeks after " + md(start) + ", so there's time to train."; return; }
+    if (race - start > 730*DAY){ err.textContent = "Pick a race day within the next 2 years."; return; }
     err.textContent = "";
 
     const V = vdot(C), VG = vdot(G), dV = VG - V;
     const W = Math.ceil((race - start + DAY) / (7*DAY));
-    const need = Math.max(6, Math.ceil(dV/0.3));
+    const need = Math.max(6, Math.ceil(dV/0.3 - 1e-9));
     const taper = 2, R = W - taper, s1 = Math.max(1, Math.round(R*4/13)), s2 = Math.max(1, Math.round(R*4/13)), s3 = Math.max(1, R - s1 - s2);
     const wkStart = w => addDays(start, (w-1)*7), wkEnd = w => addDays(start, w*7 - 1);
     set("d1", md(wkStart(1)) + " – " + md(wkEnd(s1)));

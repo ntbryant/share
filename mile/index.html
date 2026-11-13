@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%23123a63%27/%3E%3Cpath d=%27M9 22h14%27 stroke=%27%23f2b705%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3Cpath d=%27M11 10h10M11 16h10%27 stroke=%27%23fff%27 stroke-width=%273%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
 <title>Road to a 7:00 Mile</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="What sports science says about dropping a mile from 7:46 to 7:00, with paces, workouts and weekly plans for 2–4 runs a week.">
@@ -59,7 +60,7 @@ mark{background:var(--goal);color:var(--goal-ink);padding:0 .25em;border-radius:
 .race-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}
 .clock{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--lane-ink)}
 .legend{display:flex;gap:14px;font-size:.85rem;flex-wrap:wrap}
-.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend > span{display:inline-flex;align-items:center;gap:6px}
 .dot{width:12px;height:12px;border-radius:50%;display:inline-block}
 .btn{font:700 .9rem var(--body);border:0;border-radius:999px;padding:9px 16px;cursor:pointer;background:var(--goal);color:var(--goal-ink)}
 .times{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-top:24px}
@@ -81,7 +82,7 @@ mark{background:var(--goal);color:var(--goal-ink);padding:0 .25em;border-radius:
 .gap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:28px}
 .gap div{background:var(--surface);padding:20px}
 .gap b{display:block;font-family:var(--display);font-weight:900;font-size:2.6rem;line-height:1}
-.gap span{color:var(--muted);font-size:.92rem}
+.gap > div > span{color:var(--muted);font-size:.92rem}
 
 /* Laps chart */
 .laps{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;overflow-x:auto}
@@ -521,7 +522,18 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.9rem;border-top:1px
   const MILE = 1609.34;
   const fmt = s => { s = Math.max(0,s); const m = Math.floor(s/60); const r = s - m*60; return m + ":" + (r<10?"0":"") + r.toFixed(1); };
   const fmt0 = s => { s = Math.round(s); const m = Math.floor(s/60); const r = s%60; return m + ":" + (r<10?"0":"") + r; };
-  function parse(s){ s = String(s||"").trim(); const m = /^(\d{1,2})[:.\-](\d{2})$/.exec(s) || /^(\d{1,2})(\d{2})$/.exec(s); if(!m) return null; const sec = +m[1]*60 + +m[2]; return (+m[2] < 60 && sec >= 240 && sec <= 900) ? sec : null; }
+  function check(raw, label){
+    const s = String(raw == null ? "" : raw).trim();
+    if (!s) return {msg: label + " is empty. Type a time like 7:46."};
+    const m = /^(\d{1,2})\s*[:.\-]\s*(\d{1,2})$/.exec(s) || /^(\d{1,2})(\d{2})$/.exec(s);
+    if (!m) return {msg: label + ": “" + s.slice(0, 12) + (s.length > 12 ? "…" : "") + "” isn't a time. Type minutes and seconds, like 7:46."};
+    if (+m[2] > 59) return {msg: label + ": seconds only go up to 59."};
+    const sec = +m[1]*60 + +m[2];
+    if (sec < 224) return {msg: label + ": that's faster than the world record (3:43). Nice try."};
+    if (sec > 900) return {msg: label + ": enter a running time of 15:00 or less."};
+    return {sec};
+  }
+  function parse(s){ return check(s, "").sec || null; }
   function vdot(sec){ const t = sec/60, v = MILE/t;
     const pct = 0.8 + 0.1894393*Math.exp(-0.012778*t) + 0.2989558*Math.exp(-0.1932605*t);
     return (-4.60 + 0.182258*v + 0.000104*v*v)/pct; }
@@ -599,14 +611,15 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.9rem;border-top:1px
 
   /* ---------- Everything that depends on the two times ---------- */
   function render(){
-    const c = parse(curEl.value), g = parse(goalEl.value), err = document.getElementById("err");
-    if (!c || !g){ err.textContent = "Type times like 7:46 (between 4:00 and 15:00)."; return; }
+    const err = document.getElementById("err"), cc = check(curEl.value, "My mile now"), gc = check(goalEl.value, "My goal");
+    if (cc.msg || gc.msg){ err.textContent = cc.msg || gc.msg; return; }
+    const c = cc.sec, g = gc.sec;
     if (g >= c){ err.textContent = "Your goal should be faster than your current time."; return; }
     err.textContent = "";
     C = c; G = g;
     const V = vdot(C), VG = vdot(G), dV = VG - V;
-    const weeksFor = n => Math.max(6, Math.ceil(dV/RATE[n]));
-    const W = weeksFor(runs);
+    const weeksFor = n => Math.max(6, Math.ceil(dV/RATE[n] - 1e-9));
+    const W = Math.min(52, weeksFor(runs));
 
     set("cur", fmt0(C)); set("goal", fmt0(G));
     set("gapSec", Math.round(C-G)); set("gapS", gapWords(C-G));
@@ -614,13 +627,13 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.9rem;border-top:1px
     set("perLap", ((C-G)*400/MILE).toFixed(1));
     set("pct", Math.round((C/G-1)*100) + "%");
     set("vNow", Math.round(V)); set("vGoal", Math.round(VG));
-    set("weeks", W); set("runs", runs);
+    set("weeks", weeksFor(runs) > 52 ? "52+" : W); set("runs", runs);
     set("weeksAll", weeksFor(2) + " weeks at 2 runs, " + weeksFor(3) + " at 3, " + weeksFor(4) + " at 4");
     set("reach", W <= 20 ? "For a growing teenage runner that's reachable in one season with smart training."
                : W <= 36 ? "That's a solid goal for a full season of steady training."
                : "That's a big jump, so treat it as a long-term goal and use the checkpoints as stepping stones.");
     const big = document.querySelector('[data-k="bigNote"]');
-    big.hidden = W <= 30;
+    big.hidden = weeksFor(runs) <= 30;
     big.textContent = "That's a long season. Make the first time-trial target your goal for now, then enter your new time and plan the next block from there.";
 
     const rest = W - 2, b = Math.round(rest*5/14), bu = Math.round(rest*5/14), sh = rest - b - bu;
@@ -648,7 +661,7 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.9rem;border-top:1px
       ["z-r","Goal race", fmt0(per(GP,400))+" /400<small>"+per(GP,200).toFixed(1)+" s per 200</small>", "Race pace. Practice it in late-season reps."]
     ];
     document.getElementById("paceBody").innerHTML = rows.map(r => '<tr><td><span class="zone '+r[0]+'">'+r[1]+'</span></td><td class="n">'+r[2]+'</td><td>'+r[3]+'</td></tr>').join("");
-    document.getElementById("weekNote").textContent = plans[runs].note + " At " + runs + " runs a week, plan on about " + W + " weeks to " + fmt0(G) + ".";
+    document.getElementById("weekNote").textContent = plans[runs].note + " At " + runs + " runs a week, plan on about " + (weeksFor(runs) > 52 ? "a year or more" : W + " weeks") + " to " + fmt0(G) + ".";
 
     qs = "?now=" + fmt0(C).replace(":","-") + "&goal=" + fmt0(G).replace(":","-") + (race ? "&race=" + race : "");
     document.getElementById("startLink").href = onSite ? "start" + qs : "https://claude.ai/artifact/1LYrp1Mb3U98wrbaarU1xF";
